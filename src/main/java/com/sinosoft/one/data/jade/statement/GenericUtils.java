@@ -14,6 +14,9 @@ public class GenericUtils {
 
     private static final Class<?>[] EMPTY_CLASSES = new Class<?>[0];
 
+    public static final String PAGABLE_NAME = "*pageable*";
+    public static final String SORT_NAME = "*sort*";
+
     /**
      * 从参数, 返回值, 基类的: Generic 类型信息获取传入的实际类信息。
      * 

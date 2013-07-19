@@ -35,21 +35,21 @@ public class ProcedureInsertTest extends AbstractTransactionalJUnit4SpringContex
     public void testProcedureInsert() {
         TestProcedureInsertModel model = new TestProcedureInsertModel(RandomStringUtils.randomAlphabetic(8), "carvin3", new java.util.Date());
         String id = model.getId();
-       // procedureInsertDao.insertProcedure(model);
+        procedureInsertDao.insertProcedure(model);
         TestProcedureInsertModel resultModel = procedureInsertDao.selectTestProcedureInsertModel(id);
         Assert.assertTrue(resultModel != null);
         Assert.assertEquals(id, resultModel.getId());
 
         model = new TestProcedureInsertModel(RandomStringUtils.randomAlphabetic(8), "carvin3", new Timestamp(System.currentTimeMillis()));
         id = model.getId();
-       // procedureInsertDao.insertProcedure(model);
+        procedureInsertDao.insertProcedure(model);
         resultModel = procedureInsertDao.selectTestProcedureInsertModel(id);
         Assert.assertTrue(resultModel != null);
         Assert.assertEquals(id, resultModel.getId());
 
         model = new TestProcedureInsertModel(RandomStringUtils.randomAlphabetic(8), "carvin3", new Date(System.currentTimeMillis()));
         id = model.getId();
-      //  procedureInsertDao.insertProcedure(model);
+        procedureInsertDao.insertProcedure(model);
         resultModel = procedureInsertDao.selectTestProcedureInsertModel(id);
         Assert.assertTrue(resultModel != null);
         Assert.assertEquals(id, resultModel.getId());

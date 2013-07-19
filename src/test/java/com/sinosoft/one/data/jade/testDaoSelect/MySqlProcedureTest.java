@@ -28,6 +28,7 @@ import static org.junit.Assert.assertEquals;
  * User: Chunliang.Han
  * Time: 12-8-6[下午12:03]
  */
+@Ignore
 @DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:application-context-jade.xml")

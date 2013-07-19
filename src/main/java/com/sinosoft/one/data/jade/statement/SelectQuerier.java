@@ -74,15 +74,22 @@ public class SelectQuerier implements Querier {
         boolean isPage = false;
         boolean isSort = false;
         Map<String, Object> paramMap = runtime.getParameters();
-        for(String key : paramMap.keySet()){
-            if(paramMap.get(key) instanceof Pageable){
-                pageable = (Pageable) paramMap.get(key);
-                isPage = true;
-            }
-            else if(paramMap.get(key) instanceof Sort){
-                sort = (Sort) paramMap.get(key);
-                isSort = true;
-            }
+//        for(String key : paramMap.keySet()){
+//            if(paramMap.get(key) instanceof Pageable){
+//                pageable = (Pageable) paramMap.get(key);
+//                isPage = true;
+//            }
+//            else if(paramMap.get(key) instanceof Sort){
+//                sort = (Sort) paramMap.get(key);
+//                isSort = true;
+//            }
+//        }
+        if(paramMap.containsKey(GenericUtils.PAGABLE_NAME)) {
+            pageable = (Pageable) paramMap.get(GenericUtils.PAGABLE_NAME);
+            isPage = true;
+        } else if(paramMap.containsKey(GenericUtils.SORT_NAME)){
+            sort = (Sort) paramMap.get(GenericUtils.SORT_NAME);
+            isSort = true;
         }
         if (isPage && !isSort) {
             if(returnType == Page.class ){
@@ -197,9 +204,10 @@ public class SelectQuerier implements Querier {
 
 	private String parseCountSql(String sql) {
 //		sql = StringUtils.lowerCase(sql);
-		int end = StringUtils.indexOf(sql.toLowerCase(), "from");
-		String s = StringUtils.substring(sql,end);
-		return "select count(1) " + s;
+//		int end = StringUtils.indexOf(sql.toLowerCase(), "from");
+//		String s = StringUtils.substring(sql,end);
+//		return "select count(1) " + s;
+        return "select count(1) from (" + sql + ")  OneDataGenerateTableName";
 	}
 
 }

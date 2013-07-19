@@ -27,6 +27,8 @@ import com.sinosoft.one.data.jade.statement.cached.CachedStatement;
 import com.sinosoft.one.data.jpa.repository.query.SqlQueries;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -96,13 +98,17 @@ public class JadeInvocationHandler implements InvocationHandler {
         if (args == null || args.length == 0) {
             parameters = new HashMap<String, Object>(4);
         } else {
+            Class<?>[] paramTypes = method.getParameterTypes();
             parameters = new HashMap<String, Object>(args.length * 2 + 4);
             int ResultSetProcedureResultCount = 0;
             for (int i = 0; i < args.length; i++) {
-                if(args[i].getClass() == ResultSetProcedureResult.class){
+                Object arg = args[i];
+                Class<?> paramType = paramTypes[i];
+
+                if(arg.getClass() == ResultSetProcedureResult.class){
                     parameters.put("*rs"+(++ResultSetProcedureResultCount)+"*",args[i]);
-                }else if(args[i].getClass() == ProcedureResult[].class){
-                    ProcedureResult[] pr = (ProcedureResult[])args[i];
+                }else if(arg instanceof ProcedureResult[]){
+                    ProcedureResult[] pr = (ProcedureResult[])arg;
                     for(int j=0;j<pr.length;j++){
                         if(pr[j] instanceof ResultSetProcedureResult){
                             parameters.put("*rs"+(++ResultSetProcedureResultCount)+"*",pr[j]);
@@ -110,7 +116,11 @@ public class JadeInvocationHandler implements InvocationHandler {
                             parameters.put(INDEX_NAMES[i+j],pr[j]);
                         }
                     }
-                }else{
+                }  else if(Pageable.class == paramType || Pageable.class.isAssignableFrom(paramType)) {
+                    parameters.put(GenericUtils.PAGABLE_NAME, arg);
+                } else if(paramType == Sort.class) {
+                    parameters.put(GenericUtils.SORT_NAME, arg);
+                }  else{
                     parameters.put(INDEX_NAMES[i], args[i]);
                 }
 				Param sqlParam = statemenetMetaData.getSQLParamAt(i);

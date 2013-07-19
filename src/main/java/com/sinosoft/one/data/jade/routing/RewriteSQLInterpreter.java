@@ -181,7 +181,7 @@ public class RewriteSQLInterpreter implements Interpreter {
         Object value = null;
         int sqlIndex = runtime.getMetaData().getShardByIndex() + 1;
         Map<String, Object> parameters = runtime.getParameters();
-        value = parameters.get(":" + sqlIndex);
+        value = parameters.get("?" + sqlIndex);
         if (value == null) {
             throw new BadSqlGrammarException("interpreter.findShardParamValue@ShardParam", "SQL [" + runtime.getSQL()
                     + "] Query without shard parameter: " + runtime.getParameters().toString(), null);
